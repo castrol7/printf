@@ -1,6 +1,7 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdarg.h>
+
 /**
 * _printf - prints formatted output to stdout
 * @format: a character string containing format directives
@@ -8,21 +9,19 @@
 */
 
 int _printf(const char *format, ...)
-
 {
-	va_list args;
+va_list args;
+int count = 0;
 
-	va_start(args, format);
+va_start(args, format);
 
-	int count = 0;
-
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			switch (*format)
-			{
+while (*format)
+{
+if (*format == '%')
+{
+format++;
+switch (*format)
+{
 case 'c':
 count += putchar(va_arg(args, int));
 break;
@@ -35,12 +34,16 @@ break;
 default:
 count += putchar('%') + putchar(*format);
 break;
-		}
-		else
+}
+}
+else
+{
 count += putchar(*format);
-		format++;
-	}
-	va_end(args);
-	return (count);
+}
+format++;
+}
+
+va_end(args);
+return (count);
 }
 
