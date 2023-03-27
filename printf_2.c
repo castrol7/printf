@@ -1,50 +1,13 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include "main.h"
+#include"main.h"
 /**
-* _printf - custom implementation of printf
-* @format: format string
-* Return: number of characters printed
+* print_buffer - Prints the contents of the buffer if it exist
+* @buffer: Array of chars
+* @buff_ind: Index at which to add next char, represents the length.
 */
-int _printf(const char *format, ...)
+void print_buffer(char buffer[], int *buff_ind)
 {
-va_list args;
-int printed_chars = 0;
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
 
-va_start(args, format);
-
-while (*format)
-{
-if (*format == '%')
-{
-switch (*(++format))
-{
-case 'b':
-{
-unsigned int num = va_arg(args, unsigned int);
-int i, bits = sizeof(num) * 8;
-char *buffer = malloc((bits + 1) * sizeof(char));
-for (i = 0; i < bits; ++i)
-buffer[i] = ((num >> (bits - i - 1)) & 1) ? '1' : '0';
-buffer[bits] = '\0';
-printed_chars += printf("%s", buffer);
-free(buffer);
-break;
+	*buff_ind = 0;
 }
-default:
-printed_chars += printf("%%%c", *format);
-break;
-}
-}
-else
-{
-putchar(*format);
-++printed_chars;
-}
-++format;
-}
-va_end(args);
-return (printed_chars);
-}
-
