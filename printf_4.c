@@ -4,8 +4,9 @@
 #define BUFFER_SIZE 1024
 
 /**
-*main -program reads data from stdin writing it to a file "output.txt".
-*Returns 0 on success or an error code on failure.
+*main - Entry point of the program
+*
+*Return: 0 on success, non-zero on failure
 */
 int main(void)
 {
