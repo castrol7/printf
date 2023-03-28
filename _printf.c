@@ -1,59 +1,43 @@
-#include <stdarg.h>
-#include <stdio.h>
-
+#include "main.h"
 /**
-* _printf - prints output according to a format
+* _printf - prints output according to a format string
 * @format: the format string
 * Return: the number of characters printed
 */
 int _printf(const char *format, ...)
 {
 va_list args;
-int count;
+int count = 0;
 
 va_start(args, format);
-
-count = 0;
 
 for (; *format; ++format)
 {
 if (*format != '%')
-putchar(*format), ++count;
+count += _print_char(*format);
 else
 {
 switch (*++format)
 {
 case 'c':
-putchar(va_arg(args, int)), ++count;
+count += _print_char(va_arg(args, int));
 break;
 case 's':
-count += printf("%s", va_arg(args, char *));
+count += _print_string(va_arg(args, char *));
 break;
 case 'd':
 case 'i':
-count += printf("%d", va_arg(args, int));
+count += _print_int(va_arg(args, int));
 break;
 case 'b':
-{
-unsigned int n = va_arg(args, unsigned int);
-int i;
-char buffer[sizeof(unsigned int) * 8 + 1];
-
-for (i = 0; n > 0; ++i, n >>= 1)
-buffer[i] = (n & 1) ? '1' : '0';
-
-if (i == 0)
-buffer[i++] = '0';
-
-while (i-- > 0)
-putchar(buffer[i]), ++count;
-}
+count += _print_binary(va_arg(args, unsigned int));
 break;
 case '%':
-putchar('%'), ++count;
+count += _print_char('%');
 break;
 default:
-putchar('%'), putchar(*format), count += 2;
+count += _print_char('%');
+count += _print_char(*format);
 break;
 }
 }
@@ -61,4 +45,3 @@ break;
 va_end(args);
 return (count);
 }
-
