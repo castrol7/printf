@@ -8,7 +8,7 @@
 */
 int _printf(const char *format, ...)
 {
-	va_list args;
+va_list args;
 int count;
 
 va_start(args, format);
@@ -20,6 +20,7 @@ for (; *format; ++format)
 if (*format != '%')
 putchar(*format), ++count;
 else
+{
 switch (*++format)
 {
 case 'c':
@@ -32,12 +33,29 @@ case 'd':
 case 'i':
 count += printf("%d", va_arg(args, int));
 break;
+case 'b':
+{
+unsigned int n = va_arg(args, unsigned int);
+int i;
+char buffer[sizeof(unsigned int) * 8 + 1];
+
+for (i = 0; n > 0; ++i, n >>= 1)
+buffer[i] = (n & 1) ? '1' : '0';
+
+if (i == 0)
+buffer[i++] = '0';
+
+while (i-- > 0)
+putchar(buffer[i]), ++count;
+}
+break;
 case '%':
 putchar('%'), ++count;
 break;
 default:
 putchar('%'), putchar(*format), count += 2;
 break;
+}
 }
 }
 va_end(args);
